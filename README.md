@@ -282,5 +282,11 @@ public function authorize(): bool
 
 (Si no, Laravel bloqueará el formulario)
 
+php artisan migrate:fresh --seed
 
 
+php artisan config:clear
+php artisan route:clear
+php artisan storage:link
+php artisan cache:clear
+php artisan view:clear
