@@ -1,0 +1,56 @@
+# Dependencies
+/vendor
+/node_modules
+
+# Build output
+/public/hot
+/public/build
+/public/storage
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker
+Dockerfile
+docker-compose.yml
+docker-compose.*.yml
+.dockerignore
+docker/
+
+# Tests
+/tests
+/coverage
+phpunit.xml
+phpunit.xml.dist
+
+# Cache y logs
+/storage/logs/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/bootstrap/cache/*
+
+# IDE y editores
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+
+# Documentación
+*.md
+/docs
+
+# NPM
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock

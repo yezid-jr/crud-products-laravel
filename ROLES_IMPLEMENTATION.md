@@ -137,3 +137,47 @@ Asignado Role (admin/user)
 - Historial de cambios
 - Notificaciones cuando un admin accede a tus productos
 
+Docker comandos
+
+agrega los roles a los usuarios creados, el primer usuario lo coloca como admin
+
+docker-compose exec app php artisan db:seed --class=RolesSeeder
+
+levantar la app
+docker-compose up -d --build
+
+bajar la app
+docker-compose down -v
+
+migraciones:
+docker-compose exec app php artisan migrate:fresh
+
+eliminar migraciones ejemplo:
+docker-compose exec app rm database/migrations/2026_01_28_151235_create_team_user_table.php
+
+# Construir e iniciar los contenedores
+docker-compose up -d --build
+
+# Ejecutar migraciones
+docker-compose exec app php artisan migrate
+
+# (Opcional) Si tienes seeders
+docker-compose exec app php artisan db:seed
+
+# Generar app key si no tienes una
+docker-compose exec app php artisan key:generate
+
+# Ver logs en tiempo real
+docker-compose logs -f
+
+# Entrar al contenedor de la app
+docker-compose exec app bash
+
+# Correr artisan desde fuera del contenedor
+docker-compose exec app php artisan <comando>
+
+# Detener todo
+docker-compose down
+
+# Detener y eliminar volúmenes (borra la BD)
+docker-compose down -v
