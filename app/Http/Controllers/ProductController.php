@@ -6,7 +6,7 @@ use App\Models\Product;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreProductRequest;
-
+use Illuminate\Support\Facades\Gate;
 
 class ProductController extends Controller
 {
@@ -15,8 +15,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
-        $products = Product::paginate(5);
+        if (auth()->user()->isAdmin()) {
+            $products = Product::with('user')->paginate(5);
+        } else {
+            $products = auth()->user()->products()->paginate(5);
+        }
         return view('products.index', compact('products'));
     }
 
@@ -25,7 +28,6 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
         return view('products.create');
     }
 
@@ -34,8 +36,10 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        //
-        Product::create($request->validated());
+        $validated = $request->validated();
+        $validated['user_id'] = auth()->id();
+        
+        Product::create($validated);
         return redirect()
             ->route('products.index')
             ->with('success', 'Producto creado correctamente');
@@ -46,7 +50,9 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        if (!auth()->user()->isAdmin() && $product->user_id !== auth()->id()) {
+            abort(403, 'No tienes permiso para ver este producto');
+        }
         return view('products.show', compact('product'));
     }
 
@@ -55,7 +61,9 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        if (!auth()->user()->isAdmin() && $product->user_id !== auth()->id()) {
+            abort(403, 'No tienes permiso para editar este producto');
+        }
         return view('products.edit', compact('product'));
     }
 
@@ -64,7 +72,9 @@ class ProductController extends Controller
      */
     public function update(StoreProductRequest $request, Product $product)
     {
-        //
+        if (!auth()->user()->isAdmin() && $product->user_id !== auth()->id()) {
+            abort(403, 'No tienes permiso para actualizar este producto');
+        }
         $product->update($request->validated());
 
         return redirect()
@@ -77,23 +87,22 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
         $product = Product::find($id);
+        
+        if (!$product) {
+            return redirect()
+                ->route('products.index')
+                ->with('error', 'Producto no encontrado');
+        }
+
+        if (!auth()->user()->isAdmin() && $product->user_id !== auth()->id()) {
+            abort(403, 'No tienes permiso para eliminar este producto');
+        }
+
         $product->delete();
 
         return redirect()
             ->route('products.index')
             ->with('success', 'Producto eliminado correctamente');
-        // if (!$product) {
-        //     return response()->json([
-        //         'message' => 'Producto no encontrado'
-        //     ], 404);
-        // }
-
-        // $product->delete();
-
-        // return response()->json([
-        //     'message' => 'Producto eliminado correctamente'
-        // ], 200);
     }
 }

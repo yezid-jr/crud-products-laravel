@@ -23,6 +23,9 @@
                             <th class="p-3 text-left">Nombre</th>
                             <th class="p-3 text-left">Descripción</th>
                             <th class="p-3 text-left">Precio</th>
+                            @if(auth()->user()->isAdmin())
+                                <th class="p-3 text-left">Propietario</th>
+                            @endif
                             <th class="p-3 text-center">Acciones</th>
                         </tr>
                     </thead>
@@ -32,6 +35,9 @@
                                 <td class="p-3">{{ $product->name }}</td>
                                 <td class="p-3">{{ $product->description }}</td>
                                 <td class="p-3">${{ number_format($product->price, 2) }}</td>
+                                @if(auth()->user()->isAdmin())
+                                    <td class="p-3">{{ $product->user->name ?? 'Sin asignar' }}</td>
+                                @endif
                                 <td class="p-3 text-center space-x-2">
                                     <a href="{{ route('products.show', $product) }}"
                                        class="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm inline-block">
