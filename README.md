@@ -21,7 +21,7 @@ No necesitas PHP, Composer ni MySQL instalados en tu maquina. Todo corre dentro 
 ### 1. Clonar el repositorio
 
 ```bash
-git clone <url-del-repositorio>
+git clone https://github.com/yezid-jr/crud-products-laravel.git
 cd crud-productos
 ```
 
